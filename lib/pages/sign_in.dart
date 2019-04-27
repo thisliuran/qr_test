@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_test/Http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../style/theme.dart' as theme;
 
 /**
@@ -44,15 +45,45 @@ class _SignInPageState extends State<SignInPage> {
             children: <Widget>[
               //创建表单
               buildSignInTextForm(),
+                            Padding(padding: EdgeInsets.only(top: 60),
+                child: new Row(
+//                          mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Container(height: 1,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          gradient: new LinearGradient(
+                              colors: [ Colors.white10,
+                              Colors.white,
+                              ])
+                      ),
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.only(left: 15, right: 15),
+                      child: new Text("Or", style: new TextStyle(
+                          fontSize: 16, color: Colors.white),),),
+                    new Container(height: 1,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          gradient: new LinearGradient(
+                              colors: [ Colors.white,
+                              Colors.white10,
+                              ])
+                      ),
+                    ),
+                  ],
+                ),),
 
-//              Padding(
-//                padding: const EdgeInsets.only(top: 50),
-//                child: new Text("Forgot Password?",
-//                  style: new TextStyle(
-//                      fontSize: 16,
-//                      color: Colors.white,
-//                      decoration: TextDecoration.underline),),
-//              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: new Text("忘记密码?",
+                  style: new TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      decoration: TextDecoration.underline),),
+              ),
 
               /**
                * Or所在的一行
@@ -123,7 +154,7 @@ class _SignInPageState extends State<SignInPage> {
           ),
           new Positioned(
             child: buildSignInButton(),
-            top: 170,
+            top: 185,
           )
         ],
       ),
@@ -180,12 +211,15 @@ class _SignInPageState extends State<SignInPage> {
                         color: Colors.black,
                       ),
                       hintText: "手机号码",
-                      border: InputBorder.none),
+                      border: InputBorder.none
+                  ,
+                  ),
+
+                  keyboardType: TextInputType.number,
                   style: new TextStyle(fontSize: 16, color: Colors.black),
                   //验证
                   validator: (value) {
-                    if (!new RegExp(r"1([8][019]|[7][07]|[9][09])")
-                        .hasMatch(value)) {
+                    if (value==""||value==null||value.length!=11) {
                       return "手机号码不正确";
                     }
                   },
@@ -205,13 +239,16 @@ class _SignInPageState extends State<SignInPage> {
                 padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
                 child: new TextFormField(
                   focusNode: passwordFocusNode,
+                  keyboardType: TextInputType.url,
                   decoration: new InputDecoration(
+
                       icon: new Icon(
                         Icons.lock,
                         color: Colors.black,
                       ),
-                      hintText: "Password",
+                      hintText: "密码",
                       border: InputBorder.none,
+
                       suffixIcon: new IconButton(
                           icon: new Icon(
                             Icons.remove_red_eye,
@@ -222,8 +259,8 @@ class _SignInPageState extends State<SignInPage> {
                   obscureText: !isShowPassWord,
                   style: new TextStyle(fontSize: 16, color: Colors.black),
                   validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 6) {
-                      return "Password'length must longer than 6!";
+                    if (value == null || value.isEmpty) {
+                      return "密码错误！";
                     }
                   },
                   onSaved: (value) {
@@ -267,12 +304,14 @@ class _SignInPageState extends State<SignInPage> {
           FormData formData = new FormData.from(data);
           print(data);
 
-          dio.post("/login", data: formData).then((v) {
+          dio.post("/login", data: formData).then((v)  {
             String result = v.data['result'];
             print(result);
             if (result == "success") {
               dio.options.headers['token'] = v.data['token'];
-              print(v.data['token']);
+              SharedPreferences.getInstance().then((sp){
+                sp.setString("token", v.data['token']);
+              });
               Navigator.pushReplacementNamed(context, "/index");
             } else {
               Scaffold.of(context).showSnackBar(new SnackBar(

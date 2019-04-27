@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_test/Http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../style/theme.dart'  as theme;
 
 class Loading extends StatefulWidget {
   @override
@@ -11,8 +13,17 @@ class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("LOADING,正在连接服务器"),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            //设置渐变的背景
+            decoration: new BoxDecoration(
+              gradient: theme.Theme.primaryGradient,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -24,6 +35,12 @@ class _LoadingState extends State<Loading> {
   }
 
   void _login() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    print('token:$token');
+    dio.options.headers['token'] = token;
+    //await prefs.setInt('counter', counter);
+
     Response response = await dio.get("/login");
     print("StatusCode:${response.statusCode}");
     if (response.statusCode == 404 || response.statusCode == 500) {

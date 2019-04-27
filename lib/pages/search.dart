@@ -30,14 +30,19 @@ class _SearchState extends State<Search> {
       child: Stack(
         //crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 20, top: 60, right: 20),
+          GestureDetector(
+            onVerticalDragDown: (context){
+              _focusNode.unfocus();
+              _search(_controller.text);
+            },
+            child: Container(
+            padding: EdgeInsets.only(left: 0, top: 60, right: 0),
             child: ListView.builder(
                 itemCount: _list.length,
                 itemBuilder: (context,i){
                   return SpareItem(_list[i]);
                 }),
-          )
+          ),)
           ,
           Padding(
             padding: EdgeInsets.only(left: 20,right: 20),

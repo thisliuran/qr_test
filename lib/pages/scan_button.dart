@@ -16,7 +16,7 @@ class _ScanButtonState extends State<ScanButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.crop_free),
+      icon: Icon(Icons.center_focus_strong,color: Colors.lightBlue,),
       onPressed: scan,
     );
   }

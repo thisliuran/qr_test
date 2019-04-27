@@ -27,6 +27,7 @@ dependencies:
   barcode_scan: ^0.0.4
   dio: ^2.1.2
   font_awesome_flutter: ^8.4.0
+  shared_preferences: ^0.5.2
 
 dev_dependencies:
   flutter_test:

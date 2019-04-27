@@ -11,7 +11,8 @@ import 'package:qr_test/pages/scan_input.dart';
 
 void main() {
   dio.options.baseUrl = 'http://150.138.91.12:10007/api';
-  dio.options.headers['token'] = "eyJpY29uX2lkIjoxLCJuYW1lIjoi5YiY5YaJIiwicGhvbmUiOjE4OTA2Mzc0Mjg3LCJyb2xlX2lkIjoxLCJ1c2VyX2lkIjoxfQ==:KiTnpJI377-9Bl5ccemkvDMhMzU=:X--_vQZ75aaMYuWlt-aUvuiznOiCju-_vQ==";
+//  dio.options.headers['token'] =
+//"eyJpY29uX2lkIjoxLCJuYW1lIjoi5YiY5YaJIiwicGhvbmUiOjE4OTA2Mzc0Mjg3LCJyb2xlX2lkIjoxLCJ1c2VyX2lkIjoxfQ==:KiTnpJI377-9Bl5ccemkvDMhMzU=:X--_vQZ75aaMYuWlt-aUvuiznOiCju-_vQ==";
   runApp(MyApp());
 }
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Index(),
+      home: Loading(),
       theme:  ThemeData.light(),
       routes: {
         "/login":(context){return new LoginPage();},
